@@ -23,6 +23,10 @@
   #ar { position:absolute; bottom:24px; left:50%; transform:translateX(-50%);
         padding:14px 26px; border:0; border-radius:999px; font-size:16px; font-weight:700;
         background:#e8403a; color:#fff; box-shadow:0 6px 18px rgba(0,0,0,.45); cursor:pointer; }
+  #arjump { display:none; position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+           padding:15px 32px; border:0; border-radius:999px; font-size:17px; font-weight:700;
+           background:#e8403a; color:#fff; box-shadow:0 6px 20px rgba(0,0,0,.5); z-index:3; }
+  model-viewer[ar-status="session-started"] #arjump { display:block; }
   #hint { position:absolute; top:12px; left:50%; transform:translateX(-50%); z-index:2;
           padding:7px 15px; border-radius:999px; font-size:12.5px; font-weight:600;
           background:rgba(0,0,0,.55); color:#fff; pointer-events:none;
@@ -51,6 +55,7 @@
   environment-image="neutral"
   exposure="1">
   <button id="ar" slot="ar-button">スマホで AR 表示</button>
+  <button id="arjump" type="button">ジャンプ！</button>
 </model-viewer>
 <div id="hint">ロボットをタップすると跳ねます</div>
 </div>
@@ -94,6 +99,9 @@
 
   // ドラッグ(回転操作)と区別して、その場タップのときだけ跳ねさせる
   let sx = 0, sy = 0, st = 0;
+  document.getElementById('arjump')
+          .addEventListener('click', e => { e.stopPropagation(); jump(); });
+
   mv.addEventListener('pointerdown', e => { sx = e.clientX; sy = e.clientY; st = Date.now(); });
   mv.addEventListener('pointerup', e => {
     const moved = Math.hypot(e.clientX - sx, e.clientY - sy);
